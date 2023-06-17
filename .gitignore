@@ -3,6 +3,8 @@ secret_key.rtf
 paper_secret_key.txt
 paper_future_secret_key.txt
 
+*.png
+
 .ipynb_checkpoints
 .idea
 .conda
