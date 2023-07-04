@@ -72,7 +72,8 @@ class Finance:
             self.data_ = self.data_.iloc[:self.end - self.start]
 
     def _get_state(self):
-        return self.data_[self.features].iloc[self.bar - self.lags:self.bar]
+        return self.data_[self.features].iloc[self.bar -
+                                              self.lags:self.bar]
 
     def get_state(self, bar):
         return self.data_[self.features].iloc[bar - self.lags:bar]
@@ -86,8 +87,8 @@ class Finance:
         self.accuracy = 0
         self.performance = 1
         self.bar = self.lags
-        state = self.data_[self.features].iloc[self.bar - self.lags:self.bar]
-
+        state = self.data_[self.features].iloc[self.bar -
+                                               self.lags:self.bar]
         return state.values
 
     def step(self, action):
@@ -99,33 +100,18 @@ class Finance:
         self.bar += 1
         self.accuracy = self.treward / (self.bar - self.lags)
         self.performance *= math.exp(reward_2)
-
         if self.bar >= len(self.data):
             done = True
         elif reward_1 == 1:
             done = False
-        elif self.performance < self.min_performance and self.bar > self.lags + 15:
+        elif (self.performance < self.min_performance and
+              self.bar > self.lags + 15):
             done = True
-        elif self.accuracy < self.min_accuracy and self.bar > self.lags + 15:
+        elif (self.accuracy < self.min_accuracy and
+              self.bar > self.lags + 15):
             done = True
         else:
             done = False
         state = self._get_state()
         info = {}
         return state.values, reward_1 + reward_2 * 5, done, info
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
