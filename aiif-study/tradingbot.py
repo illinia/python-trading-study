@@ -1,17 +1,11 @@
 import os
 import random
-import logging
 import numpy as np
 from pylab import plt, mpl
 from collections import deque
 import tensorflow as tf
 from tensorflow import keras
-
-from tensorflow.python.framework.ops import disable_eager_execution
-disable_eager_execution()
-
-from keras.layers import Dense, Dropout
-from keras.models import Sequential
+from keras.optimizers import RMSprop
 
 os.environ['PYTHONHASHSEED'] = '0'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '5'
@@ -54,19 +48,19 @@ class TradingBot:
     def _build_model(self, hu, lr, dropout):
         ''' Method to create the DNN model.
         '''
-        model = Sequential()
-        model.add(Dense(hu, input_shape=(
+        model = keras.models.Sequential()
+        model.add(keras.layers.Dense(hu, input_shape=(
             self.learn_env.lags, self.learn_env.n_features),
             activation='relu'))
         if dropout:
-            model.add(Dropout(0.3, seed=100))
-        model.add(Dense(hu, activation='relu'))
+            model.add(keras.layers.Dropout(0.3, seed=100))
+        model.add(keras.layers.Dense(hu, activation='relu'))
         if dropout:
-            model.add(Dropout(0.3, seed=100))
-        model.add(Dense(2, activation='linear'))
+            model.add(keras.layers.Dropout(0.3, seed=100))
+        model.add(keras.layers.Dense(2, activation='linear'))
         model.compile(
             loss='mse',
-            optimizer=keras.optimizers.RMSprop(learning_rate=lr)
+            optimizer=RMSprop(learning_rate=lr)
         )
         return model
 
@@ -77,7 +71,7 @@ class TradingBot:
         '''
         if random.random() <= self.epsilon:
             return self.learn_env.action_space.sample()
-        action = self.model.predict(state)[0, 0]
+        action = self.model.predict(state, verbose=0)[0, 0]
         return np.argmax(action)
 
     def replay(self):
@@ -88,8 +82,8 @@ class TradingBot:
         for state, action, reward, next_state, done in batch:
             if not done:
                 reward += self.gamma * np.amax(
-                    self.model.predict(next_state)[0, 0])
-            target = self.model.predict(state)
+                    self.model.predict(next_state, verbose=0)[0, 0])
+            target = self.model.predict(state, verbose=0)
             target[0, 0, action] = reward
             self.model.fit(state, target, epochs=1,
                            verbose=False)
@@ -141,7 +135,7 @@ class TradingBot:
         state = np.reshape(state, [1, self.valid_env.lags,
                                    self.valid_env.n_features])
         for _ in range(10000):
-            action = np.argmax(self.model.predict(state)[0, 0])
+            action = np.argmax(self.model.predict(state, verbose=0)[0, 0])
             next_state, reward, done, info = self.valid_env.step(action)
             state = np.reshape(next_state, [1, self.valid_env.lags,
                                             self.valid_env.n_features])
