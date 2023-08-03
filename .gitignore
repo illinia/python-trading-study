@@ -1,3 +1,5 @@
+.DS_Store
+
 secret_key.txt
 secret_key.rtf
 paper_secret_key.txt
@@ -26,3 +28,5 @@ oanda/
 handson-ml2-master
 images
 datasets
+*.data
+*.pkl
