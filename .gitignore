@@ -30,3 +30,16 @@ images
 datasets
 *.data
 *.pkl
+
+py4at-master
+*.xls
+*.json
+*.csv
+*.cfg
+*.h5
+*.pkl
+
+py4at
+
+my_logs/
+my_mnist_logs/
