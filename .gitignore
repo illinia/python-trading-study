@@ -43,3 +43,4 @@ py4at
 
 my_logs/
 my_mnist_logs/
+my_cifar10_logs/
