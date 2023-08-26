@@ -38,9 +38,12 @@ py4at-master
 *.cfg
 *.h5
 *.pkl
+*.tfrecord**
+*.tfrecords
 
 py4at
 
 my_logs/
 my_mnist_logs/
 my_cifar10_logs/
+dataset/
