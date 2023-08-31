@@ -7,6 +7,8 @@ paper_future_secret_key.txt
 aiif.cfg
 
 *.png
+*.jpg
+*.jpeg
 
 .ipynb_checkpoints
 .idea
