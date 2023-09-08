@@ -50,3 +50,4 @@ my_mnist_logs/
 my_cifar10_logs/
 dataset/
 sketchrnn_model/
+my_tfhub_cache/
